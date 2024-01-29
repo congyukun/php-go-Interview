@@ -1193,3 +1193,123 @@ fastcgi 进程向 nginx 进程发送输出过程的超时时间，默认值60秒
 1. 变量存储字节减少，减少内存占用，替身变量操作速度；
 2. 改善数组结构，数组元素和hash映射表被分配在同一块内存里，降低内存占用，提升了cpu缓存命中率
 3. 改进函数的调用机制，通过优化参数传递的环节，减少了一些指令，提高执行效率；
+
+# 算法相关
+
+
+
+``` go
+package main
+
+import "fmt"
+
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func main() {
+    nums := []int{-2, 1, -3, 4, -1, 2, 1, -5, 4}
+    result := maxSubArray1(nums)
+    fmt.Println("最大和的连续子数组的和为：", result)
+}
+
+// 二叉树的最大深度
+func maxDeep(node *TreeNode) int {
+    if node == nil {
+        return 0
+    }
+    left := maxDeep(node.Left)
+    right := maxDeep(node.Right)
+    if left > right {
+        return left + 1
+    }
+    return right + 1
+}
+
+// 二叉树的最小深度
+func minDeep(node *TreeNode) int {
+    if node == nil {
+        return 0
+    }
+    left := minDeep(node.Left)
+    right := minDeep(node.Right)
+    if left < right {
+        return left + 1
+    }
+    return right + 1
+}
+
+// 未验证
+func maxSubArray(nums []int) int {
+    if len(nums) == 0 {
+        return 0
+    }
+    max := nums[0]
+    for i := 1; i < len(nums); i++ {
+        if nums[i-1] > 0 {
+            nums[i] += nums[i-1]
+        }
+        if nums[i] > max {
+            max = nums[i]
+        }
+
+    }
+    return max
+}
+
+func maxSubArray1(nums []int) int {
+    if len(nums) == 0 {
+        return 0
+    }
+    maxSum := nums[0]
+    currentSum := nums[0]
+    for i := 1; i < len(nums); i++ {
+        currentSum = max(nums[i], currentSum+nums[i])
+        maxSum = max(maxSum, currentSum)
+    }
+
+    return maxSum
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+
+// 爬楼梯
+func climbStairs(n int) int {
+    if n <= 2 {
+        return n
+    }
+    dp := make([]int, n+1)
+    dp[0] = 0
+    dp[1] = 1
+    dp[2] = 2
+    for i := 3; i <= n; i++ {
+        dp[i] = dp[i-1] + dp[i-2]
+    }
+    return dp[n]
+}
+
+// 实现爬楼梯算法
+func climbStairs1(n int) int {
+    if n <= 2 {
+        return n
+    }
+    first, second, third := 1, 2, 0
+    for i := 3; i <= n; i++ {
+        third = first + second
+        first = second
+        second = third
+    }
+    return third
+}
+
+//
+
+```
+
